@@ -55,7 +55,7 @@ class Matrix:
 
     # sub : only matrices of same dimensions.
     def __sub__(self, other):
-        return self + (-1 * other)
+        return self + (other * -1)
 
     def __rsub__(self, other):
         return other - self
@@ -117,15 +117,16 @@ class Vector(Matrix):
         if not isinstance(data, list) or \
             (len(data) == 1 and not isinstance(data[0], list)) or \
             (len(data) == 1 and any(not isinstance(item, (float, int)) for item in data[0])) or \
-                (len(data) >= 1 and any(not isinstance(i, list) or len(i) != 1 or not isinstance(i[0], (float, int)) for i in data)):
+                (len(data) > 1 and any(not isinstance(i, list) or len(i) != 1 or not isinstance(i[0], (float, int)) for i in data)):
             raise Exception(
-                "Vector constructor must contain 1 list of lists or 1 list of 1 list of scalars")
+                "Vector constructor must contain 1 list of 1-number lists OR 1 list with 1 list of scalars")
 
         super().__init__(data)
 
     def dot(self, other):
         if not type(other) == Vector or self.shape != other.shape:
-            raise Exception("Dot product only possible between vectors of matching shapes")
+            raise Exception(
+                "Dot product only possible between vectors of matching shapes")
         if self.shape[0] == 1:
             # row vector
             return sum(self.data[0][i] * other.data[0][i] for i in range(self.shape[1]))
@@ -146,3 +147,14 @@ if __name__ == "__main__":
 
     m4 = m3 - m2
     print(m4)
+
+    try:
+        v3 = Vector([[1, 2], [3, 4]])
+    except Exception as e:
+        print(e)
+
+    v = Vector([[1, 2, 3]]) 
+    print(v.dot(v))
+    v2 = Vector([[1]])
+    print(v2.dot(v2))
+    print(v2.shape)
