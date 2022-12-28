@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PACKAGES="jupyter numpy pandas scipy seaborn pycodestyle pylint pillow matplotlib"
+PACKAGES="jupyter numpy pandas scipy seaborn pycodestyle pylint pillow matplotlib scikit-learn"
 
 function which_dl {
     # If operating system name contains Darwnin: MacOS. Else Linux
