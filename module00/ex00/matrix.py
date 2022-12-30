@@ -1,6 +1,16 @@
 '''Matrix and Vector classes'''
 
 
+import copy
+import numbers
+
+
+def is_matrix_derived(obj):
+    if isinstance(obj, Matrix) and type(obj) != Matrix:
+        return True
+    return False
+
+
 class Matrix:
     def __init__(self, *args) -> None:
         # shape initializer
@@ -17,7 +27,7 @@ class Matrix:
             if len(rows) < 1 or \
                 any(not isinstance(row, list) or
                     len(row) < 1 or
-                    any(not isinstance(elem, (int, float)) for elem in row) for row in rows):
+                    any(not isinstance(elem, (int, float, numbers.Number)) for elem in row) for row in rows):
                 raise Exception(
                     "Matrix constructor: list initializer must only contain lists of numbers")
             self.shape = (len(rows), len(rows[0]))
@@ -31,38 +41,55 @@ class Matrix:
             raise Exception("Matrix constructor: unrecognized parameter(s)")
 
     def T(self):
-        T_data = [[self.data[i][j]
+        cpy = copy.deepcopy(self.data)
+        T_data = [[cpy[i][j]
                    for i in range(self.shape[0])] for j in range(self.shape[1])]
-        return Matrix(T_data)
+        if type(self) == Matrix:
+            return Matrix(T_data)
+        return type(self)(T_data)
 
     # add : only matrices of same dimensions.
     def __add__(self, other):
+        if not isinstance(other, Matrix):
+            raise Exception(
+                "Addition is impossible between matrices and other objects")
+
         if self.shape != other.shape:
             raise Exception(
                 "Addition is impossible between matrices of different shapes")
 
-        add_data = self.data
+        cpy = copy.deepcopy(self.data)
         for i in range(self.shape[0]):
             for j in range(self.shape[1]):
-                add_data[i][j] += other.data[i][j]
+                cpy[i][j] += other.data[i][j]
 
-        if type(self) == Vector and type(other) == Vector:
-            return Vector(add_data)
-        return Matrix(add_data)
+        if is_matrix_derived(self) and is_matrix_derived(other) \
+            and type(self) == type(other):
+            return type(self)(cpy)
+        return Matrix(cpy)
 
     def __radd__(self, other):
-        return self + other
+        if not isinstance(other, Matrix):
+            raise Exception(
+                "Addition is impossible between matrices and other objects")
+        return self.__add__(other)
 
     # sub : only matrices of same dimensions.
     def __sub__(self, other):
-        return self + (other * -1)
+        if not isinstance(other, Matrix):
+            raise Exception(
+                "Substraction is impossible between matrices and other objects")
+        return self.__add__(other * -1)
 
     def __rsub__(self, other):
-        return other - self
+        if not isinstance(other, Matrix):
+            raise Exception(
+                "Substraction is impossible between matrices and other objects")
+        return other.__sub__(self)
 
     # div : only scalars.
     def __truediv__(self, other):
-        if not isinstance(other, (int, float)):
+        if not isinstance(other, (int, float, numbers.Number)):
             raise Exception("Matrices can only be divided by a scalar")
         if other == 0:
             raise Exception("Division by zero is not possible")
@@ -74,36 +101,50 @@ class Matrix:
     # mul : scalars, vectors and matrices , can have errors with vectors and matrices,
     # returns a Vector if we perform Matrix * Vector mutliplication.
     def __mul__(self, other):
-        if isinstance(other, (int, float)):
-            return Matrix([[self.data[i][j] * other
-                            for j in range(self.shape[1])] for i in range(self.shape[0])])
+        if isinstance(other, (int, float, numbers.Number)):
+            cpy = copy.deepcopy(self.data)
+            data = [[cpy[i][j] * other
+                     for j in range(self.shape[1])] for i in range(self.shape[0])]
+            new_instance = Matrix(data)
+            return new_instance
 
-        elif type(other) == Matrix:
+        elif is_matrix_derived(other) or is_matrix_derived(self):
+            if self.shape[1] != other.shape[0]:
+                raise Exception(
+                    "Matrix / Vector multiplication impossible: incompatible shapes")
+            cpy = copy.deepcopy(self.data)
+            data = [[sum(cpy[row][i] * other.data[i][col]
+                         for i in range(self.shape[1])) for col in range(other.shape[1])]
+                    for row in range(self.shape[0])]
+            if self.shape[0] != 1 and other.shape[1] != 1:
+                return Matrix(data)
+            elif type(self) != Matrix:
+                return type(self)(data)
+            return type(other)(data)
+
+        elif type(other) == Matrix and type(self) == Matrix:
             if self.shape[1] != other.shape[0]:
                 raise Exception(
                     "Matrix multiplication impossible: incompatible shapes")
-            return Matrix([
-                [sum(self.data[row][i] * other.data[i][col]
-                     for i in range(self.shape[1])) for col in range(other.shape[1])]
-                for row in range(self.shape[0])
-            ])
-
-        elif type(other) == Vector:
-            if self.shape[1] != other.shape[0]:
-                raise Exception(
-                    "Matrix multiplication impossible: incompatible shapes")
-            return Vector([
-                [sum(self.data[row][i] * other.data[i][col]
-                     for i in range(self.shape[1])) for col in range(other.shape[1])]
-                for row in range(self.shape[0])
-            ])
+            cpy = copy.deepcopy(self.data)
+            data = [[sum(cpy[row][i] * other.data[i][col]
+                         for i in range(self.shape[1])) for col in range(other.shape[1])]
+                    for row in range(self.shape[0])]
+            return Matrix(data)
         else:
             raise Exception(
                 "Matrix multiplication is not allowed with types other \
 than Matrix, Vector and scalars")
 
     def __rmul__(self, other):
-        return other * self
+        if isinstance(other, (int, float, numbers.Number)):
+            return self.__mul__(other)
+        elif isinstance(other, Matrix):
+            return other.__mul__(self)
+        else:
+            raise Exception(
+                "Matrix multiplication is not allowed with types other \
+than Matrix, Vector and scalars")
 
     def __str__(self):
         return f'{type(self).__name__}({self.data})'
@@ -133,28 +174,3 @@ class Vector(Matrix):
         else:
             # column vector
             return sum(self.data[i][0] * other.data[i][0] for i in range(self.shape[0]))
-
-
-if __name__ == "__main__":
-    m = Matrix((3, 3))
-    print(m)
-
-    m2 = Matrix([[1.0, 2.0], [3.0, 4.0]])
-    print(m2)
-
-    m3 = m2.T()
-    print(m3)
-
-    m4 = m3 - m2
-    print(m4)
-
-    try:
-        v3 = Vector([[1, 2], [3, 4]])
-    except Exception as e:
-        print(e)
-
-    v = Vector([[1, 2, 3]]) 
-    print(v.dot(v))
-    v2 = Vector([[1]])
-    print(v2.dot(v2))
-    print(v2.shape)
