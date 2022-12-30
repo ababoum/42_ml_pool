@@ -44,3 +44,6 @@ if __name__ == "__main__":
     # array([[1., 1., 2., 3.],
     # [1., 4., 5., 6.],
     # [1., 7., 8., 9.]])
+    z = np.arange(0)
+    print(repr(add_intercept(z)))
+

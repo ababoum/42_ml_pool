@@ -3,6 +3,7 @@
 import numbers
 import numpy as np
 
+
 class TinyStatistician:
 
     def __init__(self) -> None:
@@ -10,7 +11,7 @@ class TinyStatistician:
 
     def mean(self, x):
         '''Computes the mean value of a list of numbers'''
-        if not isinstance(x, (list, np.ndarray)) or any(not isinstance(item, (float, int, numbers.Number)) for item in x ):
+        if not isinstance(x, (list, np.ndarray)) or any(not isinstance(item, (float, int, numbers.Number)) for item in x):
             print("Function 'mean' takes only a list or an array of numbers as parameter")
             return None
         if len(x) < 1:
@@ -22,8 +23,9 @@ class TinyStatistician:
 
     def median(self, x):
         '''Computes the median value of a list of numbers'''
-        if not isinstance(x, (list, np.ndarray)) or any(not isinstance(item, (float, int, numbers.Number)) for item in x ):
-            print("Function 'median' takes only a list or an array of numbers as parameter")
+        if not isinstance(x, (list, np.ndarray)) or any(not isinstance(item, (float, int, numbers.Number)) for item in x):
+            print(
+                "Function 'median' takes only a list or an array of numbers as parameter")
             return None
         if len(x) < 1:
             return None
@@ -35,8 +37,9 @@ class TinyStatistician:
 
     def quartile(self, x):
         '''Computes the first and third quartiles of a list of numbers'''
-        if not isinstance(x, (list, np.ndarray)) or any(not isinstance(item, (float, int, numbers.Number)) for item in x ):
-            print("Function 'quartile' takes only a list or an array of numbers as parameter")
+        if not isinstance(x, (list, np.ndarray)) or any(not isinstance(item, (float, int, numbers.Number)) for item in x):
+            print(
+                "Function 'quartile' takes only a list or an array of numbers as parameter")
             return None
         if len(x) < 1:
             return None
@@ -46,8 +49,9 @@ class TinyStatistician:
 
     def percentile(self, x, p):
         '''Computes the expected percentile of a list of numbers'''
-        if not isinstance(x, (list, np.ndarray)) or any(not isinstance(item, (float, int, numbers.Number)) for item in x ):
-            print("Function 'percentile' takes only a list or an array of numbers as parameter")
+        if not isinstance(x, (list, np.ndarray)) or any(not isinstance(item, (float, int, numbers.Number)) for item in x):
+            print(
+                "Function 'percentile' takes only a list or an array of numbers as parameter")
             return None
         if p not in range(0, 101):
             print("The wished percentile must be between 0 and 100")
@@ -67,7 +71,7 @@ class TinyStatistician:
 
     def var(self, x):
         '''Computes the variance of a list of numbers'''
-        if not isinstance(x, (list, np.ndarray)) or any(not isinstance(item, (float, int, numbers.Number)) for item in x ):
+        if not isinstance(x, (list, np.ndarray)) or any(not isinstance(item, (float, int, numbers.Number)) for item in x):
             print("Function 'var' takes only a list or an array of numbers as parameter")
             return None
         if len(x) <= 1:
@@ -76,7 +80,7 @@ class TinyStatistician:
 
     def std(self, x):
         '''Computes the standard deviation of a list of numbers'''
-        if not isinstance(x, (list, np.ndarray)) or any(not isinstance(item, (float, int, numbers.Number)) for item in x ):
+        if not isinstance(x, (list, np.ndarray)) or any(not isinstance(item, (float, int, numbers.Number)) for item in x):
             print("Function 'var' takes only a list or an array of numbers as parameter")
             return None
         var = self.var(x)
@@ -100,7 +104,7 @@ if __name__ == "__main__":
     print(tstat.quartile(a))
     # Expected result: [10.0, 59.0]
     print(tstat.quartile(b))
-    # Expected result: [5.0, 89.0]
+    # Expected result: [4.0, 27.5]
 
     print('*' * 25)
     print(tstat.percentile(a, 10))
@@ -119,7 +123,7 @@ if __name__ == "__main__":
     # Expected result: 110.81263465868862
     print(tstat.std(b))
     # Expected result: 36.72533185690771
-    
+
     print('*' * 25)
     c = np.array(range(101))
     print(tstat.percentile(c, 50))

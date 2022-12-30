@@ -55,3 +55,8 @@ if __name__ == "__main__":
     print(repr(predict_(x, theta4)))
     # Output:
     # array([[-2.], [-1.], [ 0.], [ 1.], [ 2.]])
+
+    print("ERRORS:")
+    print(repr(predict_(np.array([]), np.array([[1], [2]]))))
+    print(repr(predict_(np.array([[1], [2], [3]]), np.array([[1], [2], [3]]))))
+    print(repr(predict_(np.array([[1, 5], [2, 3], [3, 2]]), np.array([[1], [2]]))))
