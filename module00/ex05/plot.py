@@ -13,8 +13,6 @@ def is_vector_valid(x):
         return False
     if len(x.shape) == 2 and (x.shape[0] < 1 or x.shape[1] != 1):
         return False
-    if not np.any(x):
-        return False
     return True
 
 
@@ -24,8 +22,6 @@ def is_theta_valid(theta):
     if len(theta.shape) == 1 and theta.shape != (2,):
         return False
     if len(theta.shape) == 2 and theta.shape != (2, 1):
-        return False
-    if not np.any(theta):
         return False
     return True
 
@@ -45,9 +41,13 @@ def plot(x, y, theta):
             not is_theta_valid(theta) or x.size != y.size:
         print("Warning: plotting is impossible (wrong parameters)")
         return None
-    plt.scatter(x, y)
-    plt.plot(x, predict_(x, theta), 'r')
-    plt.show()
+    try:
+        plt.scatter(x, y)
+        plt.plot(x, predict_(x, theta), 'r')
+        plt.show()
+    except:
+        print("Warning: plotting is impossible (wrong parameters)")
+    return None
 
 
 if __name__ == "__main__":
@@ -62,3 +62,8 @@ if __name__ == "__main__":
 
     theta3 = np.array([[3], [0.3]])
     plot(x, y, theta3)
+
+    print('*' * 25)
+    plot(np.array([0, 1]), np.array([0, 1]), np.array([0, 1]))
+    plot(np.array([0, 1]), np.array([0, 1]), np.array([1, 1]))
+    plot(np.array([0, 2]), np.array([0, 0]), np.array([-1, 1]))

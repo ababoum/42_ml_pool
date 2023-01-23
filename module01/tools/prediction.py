@@ -22,8 +22,6 @@ def predict_(x, theta):
         return None
     if not isinstance(theta, np.ndarray) or (theta.shape != (2, 1) and theta.shape != (2, )):
         return None
-    if not np.any(x) or not np.any(theta):
-        return None
 
     X = add_intercept(x)
     if not isinstance(X, np.ndarray):

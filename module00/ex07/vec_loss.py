@@ -11,8 +11,6 @@ def is_vector_valid(x):
         return False
     if len(x.shape) == 2 and (x.shape[0] < 1 or x.shape[1] != 1):
         return False
-    if not np.any(x):
-        return False
     return True
 
 
@@ -22,8 +20,6 @@ def is_theta_valid(theta):
     if len(theta.shape) == 1 and theta.shape != (2,):
         return False
     if len(theta.shape) == 2 and theta.shape != (2, 1):
-        return False
-    if not np.any(theta):
         return False
     return True
 
@@ -45,7 +41,10 @@ def loss_(y, y_hat):
         return None
     if y.size != y_hat.size:
         return None
-    return np.vdot(y - y_hat, y - y_hat) / (2 * y.size)
+    try:
+        return np.vdot(y - y_hat, y - y_hat) / (2 * y.size)
+    except:
+        return None
 
 
 if __name__ == "__main__":
@@ -55,8 +54,13 @@ if __name__ == "__main__":
     print(loss_(X, Y))
     # Output:
     # 2.142857142857143
+    print('*' * 25)
     # Example 2:
     print(loss_(X, X))
     # Output:
     # 0.0
 
+    print('*' * 25)
+    y_hat = np.array([[1], [2], [3], [4]])
+    y = np.array([[0], [0], [0], [0]])
+    print(repr(loss_(y, y_hat)))

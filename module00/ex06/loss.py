@@ -12,8 +12,6 @@ def is_vector_valid(x):
         return False
     if len(x.shape) == 2 and (x.shape[0] < 1 or x.shape[1] != 1):
         return False
-    if not np.any(x):
-        return False
     return True
 
 
@@ -23,8 +21,6 @@ def is_theta_valid(theta):
     if len(theta.shape) == 1 and theta.shape != (2,):
         return False
     if len(theta.shape) == 2 and theta.shape != (2, 1):
-        return False
-    if not np.any(theta):
         return False
     return True
 
@@ -47,7 +43,7 @@ def loss_elem_(y, y_hat):
         return None
     if y.size != y_hat.size:
         return None
-    return (y - y_hat) ** 2
+    return (y - y_hat) ** 2 / (2 * y.size)
 
 
 def loss_(y, y_hat):
@@ -68,7 +64,11 @@ def loss_(y, y_hat):
         return None
     if y.size != y_hat.size:
         return None
-    return np.sum(loss_elem_(y, y_hat)) / (2 * y.size)
+    try:
+        return np.sum(loss_elem_(y, y_hat))
+    except:
+        return None
+
 
 if __name__ == "__main__":
     x1 = np.array([[0.], [1.], [2.], [3.], [4.]])
@@ -95,3 +95,14 @@ if __name__ == "__main__":
     print(loss_(y2, y2))
     # Output:
     # 0.0
+
+    print('*' * 25)
+    x = np.arange(1, 10)
+    print(repr(loss_elem_(x, x)))
+    print(repr(loss_(x, x)))
+
+    print('*' * 25)
+    y_hat = np.array([[1], [2], [3], [4]])
+    y = np.array([[0], [0], [0], [0]])
+    print(repr(loss_elem_(y, y_hat)))
+    print(repr(loss_(y, y_hat)))

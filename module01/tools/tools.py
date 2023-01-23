@@ -10,8 +10,6 @@ def is_vector_valid(x):
         return False
     if len(x.shape) == 2 and (x.shape[0] < 1 or x.shape[1] != 1):
         return False
-    if not np.any(x):
-        return False
     return True
 
 
@@ -21,8 +19,6 @@ def is_theta_valid(theta):
     if len(theta.shape) == 1 and theta.shape != (2,):
         return False
     if len(theta.shape) == 2 and theta.shape != (2, 1):
-        return False
-    if not np.any(theta):
         return False
     return True
 
@@ -38,7 +34,7 @@ def add_intercept(x):
     Raises:
     This function should not raise any Exception.
     """
-    if not isinstance(x, np.ndarray) or not np.any(x):
+    if not isinstance(x, np.ndarray):
         return None
 
     new_col = np.empty((x.shape[0], 1))

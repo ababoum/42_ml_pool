@@ -46,3 +46,7 @@ if __name__ == "__main__":
 
     theta3 = np.array([12, 0.8])
     plot_with_loss(x, y, theta3)
+
+    plot_with_loss(np.array([0, 1]), np.array([0, 1]), np.array([0, 1]))
+    plot_with_loss(np.array([0, 1]), np.array([0, 1]), np.array([1, 1]))
+    plot_with_loss(np.array([0, 2]), np.array([0, 0]), np.array([-1, 1]))

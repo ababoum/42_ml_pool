@@ -22,13 +22,14 @@ def predict_(x, theta):
         return None
     if not isinstance(theta, np.ndarray) or (theta.shape != (2, 1) and theta.shape != (2, )):
         return None
-    if not np.any(x) or not np.any(theta):
-        return None
 
-    X = add_intercept(x)
-    if not isinstance(X, np.ndarray):
+    try:
+        X = add_intercept(x)
+        if not isinstance(X, np.ndarray):
+            return None
+        return np.matmul(X, theta)
+    except:
         return None
-    return np.matmul(X, theta)
 
 
 if __name__ == "__main__":
@@ -59,4 +60,11 @@ if __name__ == "__main__":
     print("ERRORS:")
     print(repr(predict_(np.array([]), np.array([[1], [2]]))))
     print(repr(predict_(np.array([[1], [2], [3]]), np.array([[1], [2], [3]]))))
-    print(repr(predict_(np.array([[1, 5], [2, 3], [3, 2]]), np.array([[1], [2]]))))
+    print(
+        repr(predict_(np.array([[1, 5], [2, 3], [3, 2]]), np.array([[1], [2]]))))
+
+    print('*' * 25)
+    print(repr(predict_(x, np.array([0, 0]))))
+    print(repr(predict_(x, np.array([1, 0]))))
+    print(repr(predict_(x, np.array([0, 1]))))
+    print(repr(predict_(x, np.array([1, 1]))))

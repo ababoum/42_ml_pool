@@ -11,8 +11,6 @@ def is_vector_valid(x):
         return False
     if len(x.shape) == 2 and (x.shape[0] < 1 or x.shape[1] != 1):
         return False
-    if not np.any(x):
-        return False
     return True
 
 
@@ -22,8 +20,6 @@ def is_theta_valid(theta):
     if len(theta.shape) == 1 and theta.shape != (2,):
         return False
     if len(theta.shape) == 2 and theta.shape != (2, 1):
-        return False
-    if not np.any(theta):
         return False
     return True
 
@@ -177,6 +173,44 @@ if __name__ == "__main__":
     # Output:
     # 0.9681721733858745
     # sklearn implementation
-    print(r2_score(x, y))
+    # print(r2_score(x, y))
     # Output:
     # 0.9681721733858745
+
+    print('*' * 25)
+    x = np.array([[8], [7], [-5], [1]])
+    print(mse_(x, x))
+    y_hat = np.array([[1], [2], [3], [4]])
+    y = np.array([[0], [0], [0], [0]])
+    print(mse_(y, y_hat))
+
+    print(mse_(x, y_hat))
+    print(mean_squared_error(x, y_hat))
+
+    print('*' * 25)
+    x = np.array([[8], [7], [-5], [1]])
+    print(rmse_(x, x))
+    y_hat = np.array([[1], [2], [3], [4]])
+    y = np.array([[0], [0], [0], [0]])
+    print(rmse_(y, y_hat))
+
+    print(rmse_(x, y_hat))
+    print(sqrt(mean_squared_error(x, y_hat)))
+
+    print('*' * 25)
+    x = np.array([[8], [7], [-5], [1]])
+    print(mae_(x, x))
+    y_hat = np.array([[1], [2], [3], [4]])
+    y = np.array([[0], [0], [0], [0]])
+    print(mae_(y, y_hat))
+
+    print(mae_(x, y_hat))
+    print(mean_absolute_error(x, y_hat))
+
+    print('*' * 25)
+    y = np.array([[1], [2], [3], [4]])
+    y_hat = np.array([[0], [0], [0], [0]])
+    print(r2score_(y, y_hat))
+
+    print(r2score_(x, y_hat))
+    print(r2_score(x, y_hat))

@@ -52,3 +52,9 @@ if __name__ == "__main__":
     print(repr(simple_predict(x, theta4)))
     # Output:
     # array([-2., -1., 0., 1., 2.])
+
+    print('*' * 25)
+    print(repr(simple_predict(x, np.array([0, 0]))))
+    print(repr(simple_predict(x, np.array([1, 0]))))
+    print(repr(simple_predict(x, np.array([0, 1]))))
+    print(repr(simple_predict(x, np.array([1, 1]))))

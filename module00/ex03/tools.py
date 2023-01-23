@@ -16,16 +16,19 @@ def add_intercept(x):
     Raises:
     This function should not raise any Exception.
     """
-    if not isinstance(x, np.ndarray) or not np.any(x):
+    try:
+        if not isinstance(x, np.ndarray):
+            return None
+
+        new_col = np.empty((x.shape[0], 1))
+        np.ndarray.fill(new_col, 1.)
+
+        if len(x.shape) == 1:
+            return np.concatenate(
+                [new_col, np.array(list([item] for item in x))], axis=1)
+        return np.concatenate([new_col, x], axis=1)
+    except:
         return None
-
-    new_col = np.empty((x.shape[0], 1))
-    np.ndarray.fill(new_col, 1.)
-
-    if len(x.shape) == 1:
-        return np.concatenate(
-            [new_col, np.array(list([item] for item in x))], axis=1)
-    return np.concatenate([new_col, x], axis=1)
 
 
 if __name__ == "__main__":
@@ -46,4 +49,3 @@ if __name__ == "__main__":
     # [1., 7., 8., 9.]])
     z = np.arange(0)
     print(repr(add_intercept(z)))
-

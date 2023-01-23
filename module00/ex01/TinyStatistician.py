@@ -2,6 +2,7 @@
 
 import numbers
 import numpy as np
+import math
 
 
 class TinyStatistician:
@@ -45,7 +46,9 @@ class TinyStatistician:
             return None
         y = list(x)
         y.sort()
-        return [self.percentile(x, 25), self.percentile(x, 75)]
+        lim1 = int(math.ceil(0.25 * len(y))) - 1
+        lim2 = int(math.ceil(0.75 * len(y))) - 1
+        return [y[lim1], y[lim2]]
 
     def percentile(self, x, p):
         '''Computes the expected percentile of a list of numbers'''
@@ -54,20 +57,14 @@ class TinyStatistician:
                 "Function 'percentile' takes only a list or an array of numbers as parameter")
             return None
         if p not in range(0, 101):
-            print("The wished percentile must be between 0 and 100")
+            print("The requested percentile must be between 0 and 100")
             return None
         if len(x) < 1:
             return None
         y = list(x)
         y.sort()
-        res = float(p * (len(y) - 1) / 100)
-        lim1 = int(res)
-        lim2 = int(res) + 1
-
-        if res.is_integer():
-            return float(y[lim1])
-        else:
-            return float(y[lim1] * (lim2 - res) + y[lim2] * (res - lim1))
+        res = int(math.ceil(p * (len(y)) / 100)) - 1
+        return float(y[int(res)])
 
     def var(self, x):
         '''Computes the variance of a list of numbers'''
@@ -76,7 +73,9 @@ class TinyStatistician:
             return None
         if len(x) <= 1:
             return None
-        return float(sum((item - self.mean(x)) ** 2 for item in x) / (len(x) - 1))
+        mean = self.mean(x)
+        return sum((item - mean) ** 2 for item in x) / (len(x) - 1)
+        
 
     def std(self, x):
         '''Computes the standard deviation of a list of numbers'''
@@ -130,3 +129,21 @@ if __name__ == "__main__":
     print(tstat.percentile(c, 25))
     print(tstat.mean(c))
     print(tstat.median(c))
+
+    print('*' * 25)
+    data = [42, 7, 69, 18, 352, 3, 650, 754, 438, 2659]
+    epsilon = 1e-5
+    err = "Error, grade 0 :("
+    tstat = TinyStatistician()
+    assert abs(tstat.mean(data) - 499.2) < epsilon, err
+    assert abs(tstat.median(data) - 210.5) < epsilon, err
+    quartile = tstat.quartile(data)
+    assert abs(quartile[0] - 18) < epsilon, err
+    assert abs(quartile[1] - 650) < epsilon, err
+    assert abs(tstat.percentile(data, 10) - 3) < epsilon, err
+    assert abs(tstat.percentile(data, 28) - 18) < epsilon, err
+    assert abs(tstat.percentile(data, 83) - 754) < epsilon, err
+    print(tstat.var(data))
+    assert abs(tstat.var(data) - 654661) < epsilon * 1e5, err
+    print(tstat.std(data))
+    assert abs(tstat.std(data) - 809.11) < epsilon * 1e5, err
