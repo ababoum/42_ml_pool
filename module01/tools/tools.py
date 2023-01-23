@@ -10,6 +10,8 @@ def is_vector_valid(x):
         return False
     if len(x.shape) == 2 and (x.shape[0] < 1 or x.shape[1] != 1):
         return False
+    if x.size == 0:
+        return False
     return True
 
 
@@ -34,13 +36,16 @@ def add_intercept(x):
     Raises:
     This function should not raise any Exception.
     """
-    if not isinstance(x, np.ndarray):
+    try:
+        if not isinstance(x, np.ndarray):
+            return None
+
+        new_col = np.empty((x.shape[0], 1))
+        np.ndarray.fill(new_col, 1.)
+
+        if len(x.shape) == 1:
+            return np.concatenate(
+                [new_col, np.array(list([item] for item in x))], axis=1)
+        return np.concatenate([new_col, x], axis=1)
+    except:
         return None
-
-    new_col = np.empty((x.shape[0], 1))
-    np.ndarray.fill(new_col, 1.)
-
-    if len(x.shape) == 1:
-        return np.concatenate(
-            [new_col, np.array(list([item] for item in x))], axis=1)
-    return np.concatenate([new_col, x], axis=1)

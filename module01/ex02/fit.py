@@ -24,22 +24,24 @@ def fit_(x, y, theta, alpha, max_iter):
     Raises:
     This function should not raise any Exception.
     """
-    if not is_vector_valid(x) or not is_vector_valid(y) or not is_theta_valid(theta):
-        return None
-    if x.size != y.size:
-        return None
-    if not isinstance(alpha, (int, float)) or alpha <= 0:
-        return None
-    if not isinstance(max_iter, int) or max_iter <= 0:
-        return None
+    try:
+        if not is_vector_valid(x) or not is_vector_valid(y) or not is_theta_valid(theta):
+            return None
+        if x.size != y.size:
+            return None
+        if not isinstance(alpha, (int, float)) or alpha <= 0 or alpha >= 1:
+            return None
+        if not isinstance(max_iter, int) or max_iter < 0:
+            return None
 
-    new_theta = np.array(theta, dtype=np.float64)
-    for _ in range(max_iter):
-        gradient = simple_gradient(x, y, theta)
-        for i in range(new_theta.size):
-            new_theta[i] -= alpha * gradient[i]
-
-    return new_theta
+        new_theta = np.copy(theta.astype('float64'))
+        for _ in range(max_iter):
+            gradient = simple_gradient(x, y, new_theta)
+            new_theta[0] = new_theta[0] - alpha * gradient[0]
+            new_theta[1] = new_theta[1] - alpha * gradient[1]
+        return new_theta
+    except:
+        return None
 
 
 if __name__ == "__main__":
@@ -47,7 +49,7 @@ if __name__ == "__main__":
                  31.5527382], [48.9145838], [57.5088733]])
     y = np.array([[37.4013816], [36.1473236], [
                  45.7655287], [46.6793434], [59.5585554]])
-    theta = np.array([1, 1]).reshape((-1, 1))
+    theta = np.array([1., 1.]).reshape((-1, 1))
     # Example 0:
     theta1 = fit_(x, y, theta, alpha=5e-8, max_iter=1500000)
     print(repr(theta1))

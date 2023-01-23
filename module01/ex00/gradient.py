@@ -44,3 +44,4 @@ if __name__ == "__main__":
     print(repr(simple_gradient(x, y, theta2)))
     # Output:
     # array([[-57.86823748], [-2230.12297889]])
+	
