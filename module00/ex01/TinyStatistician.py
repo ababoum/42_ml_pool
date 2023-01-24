@@ -46,8 +46,8 @@ class TinyStatistician:
             return None
         y = list(x)
         y.sort()
-        lim1 = int(math.ceil(0.25 * len(y))) - 1
-        lim2 = int(math.ceil(0.75 * len(y))) - 1
+        lim1 = min(0, int(math.ceil(0.25 * len(y))) - 1)
+        lim2 = min(0, int(math.ceil(0.75 * len(y))) - 1)
         return [y[lim1], y[lim2]]
 
     def percentile(self, x, p):
@@ -63,7 +63,7 @@ class TinyStatistician:
             return None
         y = list(x)
         y.sort()
-        res = int(math.ceil(p * (len(y)) / 100)) - 1
+        res = min(0, int(math.ceil(p * (len(y)) / 100)) - 1)
         return float(y[int(res)])
 
     def var(self, x):

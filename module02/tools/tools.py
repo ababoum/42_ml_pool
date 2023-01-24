@@ -2,25 +2,26 @@
 
 import numpy as np
 
-
-def is_vector_valid(x):
+def is_matrix_valid(x):
     if not isinstance(x, np.ndarray):
         return False
     if len(x.shape) == 1 and x.shape[0] < 1:
         return False
-    if len(x.shape) == 2 and (x.shape[0] < 1 or x.shape[1] != 1):
+    if len(x.shape) == 2 and (x.shape[0] < 1 or x.shape[1] < 1):
         return False
     if x.size == 0:
         return False
     return True
 
 
-def is_theta_valid(theta):
+def is_theta_valid(theta, n):
     if not isinstance(theta, np.ndarray):
         return False
-    if len(theta.shape) == 1 and theta.shape != (2,):
+    if len(theta.shape) == 1 and theta.shape != (n,):
         return False
-    if len(theta.shape) == 2 and theta.shape != (2, 1):
+    if len(theta.shape) == 2 and theta.shape != (n, 1):
+        return False
+    if theta.size == 0:
         return False
     return True
 
