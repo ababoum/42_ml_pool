@@ -4,7 +4,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from my_logistic_regression import MyLogisticRegression as MyLR
 
-
 zipcode = 0
 
 if len(sys.argv) != 2:
@@ -49,12 +48,43 @@ print(
     f'The ratio of correct predictions is {100 * correct_guesses / len(y_pred):.2f}%')
 
 # Plot the data
-
-# weight vs planet
 y_pred = mylr.predict_(x)
 y_pred = [1 if item > 0.5 else 0 for item in y_pred]
-plt.scatter(x[:, 0], y, color='red', marker='x',
-            label=f'Real origin (from planet {zipcode} or not)')
-plt.scatter(x[:, 0], y_pred, color='blue', marker='o', label='Prediction')
+trues = [i for i in range(len(y)) if y_pred[i] == 1]
+falses = [i for i in range(len(y)) if y_pred[i] == 0]
+
+fig = plt.figure(figsize=(25, 12))
+
+# weight vs height
+fig.add_subplot(1, 3, 1)
+plt.scatter(x[trues, 0], x[trues, 1], color='green', marker='o',
+            label=f'From planet {zipcode}')
+plt.scatter(x[falses, 0], x[falses, 1], color='red',
+            marker='o', label=f'Not from planet {zipcode}')
+plt.xlabel('Weight')
+plt.ylabel('Height')
 plt.legend()
+
+# height vs bone density
+fig.add_subplot(1, 3, 2)
+plt.scatter(x[trues, 1], x[trues, 2], color='green', marker='o',
+            label=f'From planet {zipcode}')
+plt.scatter(x[falses, 1], x[falses, 2], color='red',
+            marker='o', label=f'Not from planet {zipcode}')
+plt.xlabel('Height')
+plt.ylabel('Bone density')
+plt.legend()
+
+
+# bone density vs weight
+fig.add_subplot(1, 3, 3)
+plt.scatter(x[trues, 2], x[trues, 0], color='green', marker='o',
+            label=f'From planet {zipcode}')
+plt.scatter(x[falses, 2], x[falses, 0], color='red',
+            marker='o', label=f'Not from planet {zipcode}')
+plt.xlabel('Bone density')
+plt.ylabel('Weight')
+plt.legend()
+
+
 plt.show()
