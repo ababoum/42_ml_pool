@@ -20,9 +20,9 @@ else:
 # Load data
 
 df_x = pd.read_csv(
-    "/mnt/nfs/homes/mababou/work/ml_pool/module03/data/solar_system_census.csv")
+    "../data/solar_system_census.csv")
 df_y = pd.read_csv(
-    "/mnt/nfs/homes/mababou/work/ml_pool/module03/data/solar_system_census_planets.csv")
+    "../data/solar_system_census_planets.csv")
 x = np.array(df_x[['weight', 'height', 'bone_density']])
 y = np.array([(0, 1)[int(item) == zipcode]
              for item in df_y['Origin']]).reshape((-1, 1))
