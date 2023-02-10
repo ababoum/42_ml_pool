@@ -1,5 +1,5 @@
 import numpy as np
-from my_linear_regression import MyLinearRegression as my_lr
+from mylinearregression import MyLinearRegression as my_lr
 import matplotlib.pyplot as plt
 
 
@@ -26,16 +26,16 @@ class MyRidge(my_lr):
         self.thetas = thetas
 
     def loss_elem_(self, y, y_hat):
-        if not super().is_vector_valid(y) or \
-                not super().is_vector_valid(y_hat):
+        if not super().is_matrix_valid(y) or \
+                not super().is_matrix_valid(y_hat):
             return None
         if y.size != y_hat.size:
             return None
         return (y - y_hat) ** 2 + self.lambda_ * np.sum(self.thetas ** 2)
 
     def loss_(self, y, y_hat):
-        if not super().is_vector_valid(y) or \
-                not super().is_vector_valid(y_hat):
+        if not super().is_matrix_valid(y) or \
+                not super().is_matrix_valid(y_hat):
             return None
         if y.size != y_hat.size:
             return None
@@ -46,16 +46,16 @@ class MyRidge(my_lr):
 
     def fit_(self, x, y):
         try:
-            if not super().is_vector_valid(x) or \
-                    not super().is_vector_valid(y):
+            if not super().is_matrix_valid(x) or \
+                    not super().is_matrix_valid(y):
                 return None
-            if x.size != y.size:
+            if x.shape[0] != y.shape[0]:
                 return None
 
             for _ in range(self.max_iter):
                 gradient = self.gradient_(x, y)
-                self.thetas[0] -= self.alpha * gradient[0]
-                self.thetas[1] -= self.alpha * gradient[1]
+                for i in range(len(self.thetas)):
+                    self.thetas[i] -= self.alpha * gradient[i]
         except Exception as e:
             print(e)
             return None
@@ -77,9 +77,9 @@ class MyRidge(my_lr):
         This function should not raise any Exception.
         """
         try:
-            if not super().is_vector_valid(x) or \
-                not super().is_vector_valid(y) or \
-                    not super().is_theta_valid(self.thetas):
+            if not super().is_matrix_valid(x) or \
+                not super().is_matrix_valid(y) or \
+                    not super().is_theta_valid(self.thetas, x.shape[1] + 1):
                 return None
 
             theta_calc = self.thetas.copy()
@@ -100,19 +100,31 @@ if __name__ == "__main__":
 
     # Example 0:
     myridge0 = MyRidge(np.array([1, 1]).reshape(-1, 1), max_iter=10000)
-    y_hat = myridge0.predict_(x)
+    y_hat_before = myridge0.predict_(x)
     print(myridge0.thetas)
 
-    print(f'Before: loss = {myridge0.loss_(y, y_hat)}')
+    print(f'Before: loss = {myridge0.loss_(y, y_hat_before)}')
     myridge0.fit_(x, y)
-    y_hat = myridge0.predict_(x)
+    y_hat_after = myridge0.predict_(x)
     print(myridge0.thetas)
-    print(f'After: loss = {myridge0.loss_(y, y_hat)}')
+    print(f'After: loss = {myridge0.loss_(y, y_hat_after)}')
 
+
+    fig, ax = plt.subplots(2)
+    
+    fig.set_figheight(10)
+    fig.set_figwidth(10)
+    plt.title("MyRidge")
 
     # Plot the result
-    plt.scatter(x, y)
-    plt.plot(x, y_hat, 'r')
+    ax[0].scatter(x, y)
+    ax[0].plot(x, y_hat_before, 'r')
+    ax[0].set_title("Before")
+
+    ax[1].scatter(x, y)
+    ax[1].plot(x, y_hat_after, 'r')
+    ax[1].set_title("After")
+
     plt.show()
 
 
