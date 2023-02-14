@@ -63,6 +63,8 @@ class TinyStatistician:
             return None
         y = list(x)
         y.sort()
+        if p == 0:
+            return float(y[0])
         res = min(0, int(math.ceil(p * (len(y)) / 100)) - 1)
         return float(y[int(res)])
 
