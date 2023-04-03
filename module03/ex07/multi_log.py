@@ -16,7 +16,7 @@ y = np.array(df_y[['Origin']])
 
 # Split data
 
-x_train, x_test, y_train, y_test = MyLR.data_spliter(x, y, 0.7)
+x_train, x_test, y_train, y_test = MyLR.data_splitter(x, y, 0.7)
 y_train = y_train.reshape((-1, 1))
 y_test = y_test.reshape((-1, 1))
 

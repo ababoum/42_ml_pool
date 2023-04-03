@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import sys
-from data_spliter import data_spliter
+from data_splitter import data_splitter
 from polynomial_model import add_polynomial_features
 from ridge import MyRidge as MyRdg
 
@@ -99,12 +99,12 @@ y = np.array(df['target']).reshape((-1, 1))
 # y = zscore(y)
 
 # Split the data into train and test
-x_train, x_test, y_train, y_test = data_spliter(x, y, 0.8)
+x_train, x_test, y_train, y_test = data_splitter(x, y, 0.8)
 y_train = y_train.reshape((-1, 1))
 y_test = y_test.reshape((-1, 1))
 
 # Split test data into validation and test
-x_test, x_val, y_test, y_val = data_spliter(x_test, y_test, 0.5)
+x_test, x_val, y_test, y_val = data_splitter(x_test, y_test, 0.5)
 
 # prepare the benchmark file output
 file = open("models.csv", "w")

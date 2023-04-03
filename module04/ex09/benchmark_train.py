@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import sys
-from data_spliter import data_spliter
+from data_splitter import data_splitter
 from polynomial_model_extended import add_polynomial_features
 from my_logistic_regression import MyLogisticRegression as mylogr
 from other_metrics import f1_score_
@@ -85,12 +85,12 @@ y = np.array(df_y['Origin']).reshape((-1, 1))
 x = zscore(x)
 
 # Split the data into train and test
-x_train, x_test, y_train, y_test = data_spliter(x, y, 0.6)
+x_train, x_test, y_train, y_test = data_splitter(x, y, 0.6)
 y_train = y_train.reshape((-1, 1))
 y_test = y_test.reshape((-1, 1))
 
 # Split test data into validation and test
-x_test, x_val, y_test, y_val = data_spliter(x_test, y_test, 0.5)
+x_test, x_val, y_test, y_val = data_splitter(x_test, y_test, 0.5)
 
 # prepare the benchmark file output
 file = open("models.csv", "w")

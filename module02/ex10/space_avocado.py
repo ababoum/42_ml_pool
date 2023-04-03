@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from data_spliter import data_spliter
+from data_splitter import data_splitter
 from polynomial_model import add_polynomial_features
 from mylinearregression import MyLinearRegression as MyLR
 
@@ -43,7 +43,7 @@ y = np.array(df['target']).reshape((-1, 1))
 y = zscore(y)
 
 # Split the data into train and test
-x_train, x_test, y_train, y_test = data_spliter(x, y, 0.8)
+x_train, x_test, y_train, y_test = data_splitter(x, y, 0.8)
 y_train = y_train.reshape((-1, 1))
 y_test = y_test.reshape((-1, 1))
 

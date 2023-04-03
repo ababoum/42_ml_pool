@@ -30,7 +30,7 @@ mylr = MyLR(theta=np.zeros((x.shape[1] + 1, 1)), alpha=1e-4, max_iter=100000)
 
 # Split data
 
-x_train, x_test, y_train, y_test = MyLR.data_spliter(x, y, 0.8)
+x_train, x_test, y_train, y_test = MyLR.data_splitter(x, y, 0.8)
 y_train = y_train.reshape((-1, 1))
 y_test = y_test.reshape((-1, 1))
 

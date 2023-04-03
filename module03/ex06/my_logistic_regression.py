@@ -69,7 +69,7 @@ class MyLogisticRegression():
             return None
 
     @staticmethod
-    def data_spliter(x, y, proportion):
+    def data_splitter(x, y, proportion):
         """Shuffles and splits the dataset (given by x and y) into a training and a test set,
         while respecting the given proportion of examples to be kept in the training set.
         Args:
